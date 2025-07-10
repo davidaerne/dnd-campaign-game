@@ -1,0 +1,160 @@
+{
+  "campaignId": "missing_merchant",
+  "title": "The Missing Merchant",
+  "description": "A wealthy merchant has gone missing on the road to Greenhill. The party must investigate his disappearance and rescue him from goblin bandits.",
+  "difficulty": "beginner",
+  "estimatedDuration": "2-3 hours",
+  "playerLevels": [1, 3],
+  "scenes": [
+    {
+      "id": "crossroads_tavern",
+      "type": "town",
+      "title": "The Crossroads Tavern",
+      "background": "tavern_interior_cozy.jpg",
+      "music": "peaceful_tavern.mp3",
+      "description": "A cozy tavern at the crossroads where travelers often stop for rest and information. The warm firelight flickers across worried faces.",
+      "npcs": [
+        {
+          "id": "tavern_keeper",
+          "name": "Brom Ironhand",
+          "position": { "x": 35, "y": 60 },
+          "sprite": "dwarf_innkeeper.png",
+          "relationship": 0,
+          "dialogue": {
+            "greeting": "Welcome, travelers! You look like capable folk. Perhaps you can help with our troubles?",
+            "nodes": [
+              {
+                "id": "main_quest",
+                "text": "A merchant named Gareth was supposed to arrive three days ago with supplies for the village. His caravan never showed up. The road's been dangerous lately with goblin raids.",
+                "choices": [
+                  {
+                    "id": "accept_quest",
+                    "text": "We'll find this merchant and bring him back safely.",
+                    "consequences": [
+                      { "type": "add_quest", "value": "rescue_merchant" },
+                      { "type": "relationship_change", "value": 1 }
+                    ]
+                  },
+                  {
+                    "id": "decline",
+                    "text": "We're not interested in your problems.",
+                    "consequences": [
+                      { "type": "relationship_change", "value": -1 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "to": "darkwood_entrance",
+          "trigger": "choice_made",
+          "position": { "x": 90, "y": 30 },
+          "label": "Head to Darkwood Forest"
+        }
+      ]
+    },
+    {
+      "id": "darkwood_entrance",
+      "type": "exploration",
+      "title": "Darkwood Forest - Main Path",
+      "background": "dark_forest_path.jpg",
+      "music": "mysterious_forest.mp3",
+      "description": "The main road winds through the dense Darkwood Forest. Thick canopy blocks most sunlight, creating perpetual twilight. The silence is unnerving.",
+      "encounters": [
+        {
+          "id": "wagon_wreckage",
+          "type": "discovery",
+          "triggerChance": 1.0,
+          "position": { "x": 40, "y": 50 },
+          "data": {
+            "description": "You find the remains of a merchant wagon, overturned and ransacked."
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "to": "goblin_cave_exterior",
+          "trigger": "area_explored",
+          "position": { "x": 80, "y": 20 },
+          "label": "Follow the Trail North"
+        }
+      ]
+    },
+    {
+      "id": "goblin_cave_exterior",
+      "type": "dungeon",
+      "title": "Goblin Cave - Entrance",
+      "background": "cave_entrance_forest.jpg",
+      "music": "ominous_cave.mp3",
+      "description": "You've found the goblin lair - a natural cave entrance between two massive oak trees. Crude fortifications block the entrance.",
+      "encounters": [
+        {
+          "id": "cave_guards",
+          "type": "combat",
+          "triggerChance": 1.0,
+          "position": { "x": 50, "y": 45 },
+          "data": {
+            "description": "Two goblin guards notice your approach!"
+          }
+        }
+      ],
+      "transitions": [
+        {
+          "to": "campaign_conclusion",
+          "trigger": "area_explored",
+          "position": { "x": 50, "y": 30 },
+          "label": "Enter the Cave"
+        }
+      ]
+    },
+    {
+      "id": "campaign_conclusion",
+      "type": "social",
+      "title": "Heroes' Return",
+      "background": "tavern_celebration.jpg",
+      "music": "victory_celebration.mp3",
+      "description": "You return to the Crossroads Tavern as heroes. The merchant is safe, the goblin threat is ended, and the village celebrates your success.",
+      "npcs": [
+        {
+          "id": "grateful_merchant",
+          "name": "Gareth the Merchant",
+          "position": { "x": 40, "y": 60 },
+          "sprite": "human_merchant_grateful.png",
+          "relationship": 3,
+          "dialogue": {
+            "greeting": "I owe you my life! Please accept this reward as a token of my gratitude.",
+            "nodes": [
+              {
+                "id": "reward_giving",
+                "text": "Here's 300 gold pieces for your heroic efforts!",
+                "choices": [
+                  {
+                    "id": "accept_graciously",
+                    "text": "Thank you, Gareth. We're glad you're safe.",
+                    "consequences": [
+                      { "type": "add_gold", "value": 300 },
+                      { "type": "add_experience", "value": 500 }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "transitions": []
+    }
+  ],
+  "globalData": {
+    "questItems": ["merchant_letter", "goblin_evidence"],
+    "partyLevel": 2,
+    "availableActions": ["combat", "dialogue", "exploration", "trading"],
+    "experienceRewards": {
+      "quest_completion": 1000
+    }
+  }
+} 
